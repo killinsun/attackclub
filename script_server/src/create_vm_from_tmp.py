@@ -1,7 +1,7 @@
 #!/bin/env python 
 # -*- coding: utf-8 -*-
  
-#import pexpect
+import pexpect
 import sys
 import time
 import re
@@ -50,31 +50,20 @@ def main():
     
 
     #Delete be created local vmx file.
+    vmx_path = remote_file
 
-#    child = pexpect.spawn("/usr/bin/ssh root@" + esxi_name)
-#    child.expect("Password:")
-#    child.sendline(Password)
-#    child.expect("~ #")
-#    child.sendline("mkdir /vmfs/volumes/" + deploy_target_datastore + "/" + vm_name + "/")
-#    child.expect("~ #")
-#    child.sendline("vmkfstools -i /vmfs/volumes/" + template_datastore + "/" + template_vm + "/" + template_vm + ".vmdk /vmfs/volumes/" + deploy_target_datastore + "/" + vm_name +"/" + vm_name +".vmdk -d thin")
-#    index = child.expect([r"Clone: [0-9][0-9]% done",r"~ #"])
-#    while True:
-#      if index == 0:
-#        child.sendline("aaa")
-#        index = child.expect([r"Clone: [0-9][0-9]% done",r"~ #"])
-#        print(child.after.decode('utf-8'))
-#        time.sleep(10)
-#      elif index == 1:
-#        child.sendline("aaa")
-#        index = child.expect([r"Clone: [0-9][0-9]% done",r"~ #"])
-#        print("Completed!")
-#        time.sleep(0.1)
-#        child.close()
-#        print(child.after.decode('utf-8'))
-#        print(child.before.decode('utf-8'))
-#        break
-  
+    child = pexpect.spawn("/usr/bin/ssh root@" + esxi_name)
+    child.expect("Password:")
+    child.sendline(Password)
+    child.expect("~ #")
+    child.sendline("vim-cmd solo/registervm " + vmx_path + " " + vm_name)
+    print(child.after.decode('utf-8'))
+    print(child.before.decode('utf-8'))
+    child.expect("~ #")
+    print(child.after.decode('utf-8'))
+    print(child.before.decode('utf-8'))
+    time.sleep(0.1)
+    child.close()
  
 if __name__ == "__main__": 
         main()
