@@ -24,12 +24,12 @@ def main():
     index = child.expect([r"Clone: [0-9][0-9]% done",r"~ #"])
     while True:
       if index == 0:
-        child.sendline("aaa")
+        child.sendline("")
         index = child.expect([r"Clone: [0-9][0-9]% done",r"~ #"])
         print(child.after.decode('utf-8'))
         time.sleep(10)
       elif index == 1:
-        child.sendline("aaa")
+        child.sendline("")
         index = child.expect([r"Clone: [0-9][0-9]% done",r"~ #"])
         print("Completed!")
         time.sleep(0.1)

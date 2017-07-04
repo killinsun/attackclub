@@ -1,12 +1,12 @@
 #!/bin/env python 
 # -*- coding: utf-8 -*-
  
-import pexpect
 import sys
 import time
 import re
 import os
-from paramiko import SSHClient, AutoAddPolicy
+#from paramiko import SSHClient, AutoAddPolicy
+import pexpect
  
 def main():
 	
@@ -36,18 +36,27 @@ def main():
 
     #Upload vmx file.
 
-    ssh = SSHClient()
-    ssh.set_missing_host_key_policy(AutoAddPolicy())
-    ssh.connect(esxi_name, 22, "root", Password)
-    sftp = ssh.open_sftp()
+   # ssh = SSHClient()
+   # ssh.set_missing_host_key_policy(AutoAddPolicy())
+   # ssh.connect(esxi_name, 22, "root", Password)
+   # sftp = ssh.open_sftp()
 
     local_file = dir_path + new_text + ".vmx"
     remote_file = "/vmfs/volumes/" + deploy_target_datastore + "/" + vm_name + "/" + vm_name + ".vmx"
-    sftp.put(local_file, remote_file)
-    
-    sftp.close()
-    ssh.close()
-    
+   # sftp.put(local_file, remote_file)
+   # 
+   # sftp.close()
+   # ssh.close()
+   # 
+    child = pexpect.spawn("scp " + local_file + " root@" + esxi_name + ":" + remote_file)
+    child.expect("Password:")
+    child.sendline(Password)
+    print(child.after.decode('utf-8'))
+    print(child.before.decode('utf-8'))
+    child.close()
+    print("section1 complete")
+    print("scp " + local_file + " root@" + esxi_name + ":" + remote_file)
+
 
     #Delete be created local vmx file.
     vmx_path = remote_file
